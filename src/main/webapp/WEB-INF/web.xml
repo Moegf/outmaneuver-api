@@ -1,0 +1,14 @@
+<web-app>
+    <servlet>
+        <servlet-name>MainPage</servlet-name>
+        <servlet-class>servlets.MainPage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/static/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MainPage</servlet-name>
+        <url-pattern></url-pattern>
+    </servlet-mapping>
+</web-app>
