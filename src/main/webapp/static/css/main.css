@@ -1,0 +1,27 @@
+header {
+    background-color: #00ffff;
+    height: 5em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    position: sticky;
+}
+
+header a {
+    font-size: 40pt;
+    color: #000000;
+    text-decoration: none;
+}
+
+.invisible {
+    display: none;
+}
+
+#userGreeting{
+    font-size: 20pt;
+}

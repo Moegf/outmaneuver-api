@@ -3,12 +3,36 @@
         <servlet-name>MainPage</servlet-name>
         <servlet-class>servlets.MainPage</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>About</servlet-name>
+        <servlet-class>servlets.About</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Signup</servlet-name>
+        <servlet-class>servlets.Signup</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>servlets.Login</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>/static/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MainPage</servlet-name>
-        <url-pattern></url-pattern>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>About</servlet-name>
+        <url-pattern>/about</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Signup</servlet-name>
+        <url-pattern>/signup</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/login</url-pattern>
     </servlet-mapping>
 </web-app>

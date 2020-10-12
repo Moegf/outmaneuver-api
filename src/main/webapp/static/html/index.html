@@ -2,10 +2,22 @@
 <html>
     <head>
         <title>Welcome to OutManeuver</title>
+        <link rel="stylesheet" href="/static/css/main.css"/>
+
+        <script defer src="https://www.gstatic.com/firebasejs/7.22.1/firebase-app.js"></script>
+        <script defer src="https://www.gstatic.com/firebasejs/7.22.1/firebase-auth.js"></script>
+        <script defer src="https://www.gstatic.com/firebasejs/7.22.1/firebase-firestore.js"></script>
+        <script defer src="/static/javascript/init-firebase.js"></script>
+        <script defer src="/static/javascript/index.js"></script>
     </head>
     <body>
-        <header>
-            <h1>Hello!</h1>
+        <header id="header">
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/signup">Signup</a>
+            <a href="/login" id="login">Login</a>
+            <a href="javascript:logout()" id="logout" class="invisible">Logout</a>
+            <a href="/play">Play</a>
         </header>
     </body>
 </html>
