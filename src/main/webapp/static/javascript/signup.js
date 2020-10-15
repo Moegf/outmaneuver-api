@@ -13,13 +13,13 @@ function signup(){
     let password = document.getElementById("password").value
     let passwordConfirm = document.getElementById("passwordConfirm").value
 
-    if(password !== passwordConfirm){
+    if (password !== passwordConfirm) {
         alert("Passwords do not match")
-        location.reload()
+        // location.reload()
     }
 
     firebase.auth().createUserWithEmailAndPassword(email, password).catch(error => {
-        alert(`Sorry something went wrong: ${error.message}`)
-        location.reload()
+        alert(`Something went wrong: ${error.message}`)
+        // location.reload()
     })
 }
