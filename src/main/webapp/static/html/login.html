@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Welcome to OutManeuver</title>
+        <title>Login</title>
         <link rel="stylesheet" href="/static/css/main.css"/>
 
         <script defer src="https://www.gstatic.com/firebasejs/7.22.1/firebase-app.js"></script>
@@ -19,9 +19,9 @@
             <a href="/play">Play</a>
         </header>
         <form>
-            <input type="text" id="email"></input>
-            <input type="password" id = "password"></input>
+            <input type="email" id="email" placeholder="Email"></input><br>
+            <input type="password" id="password" placeholder="Password"></input><br>
         </form>
-        <button onlick="login()">Login</button>
+        <button onclick="login()">Login</button>
     </body>
 </html>
