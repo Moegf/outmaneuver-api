@@ -1,5 +1,11 @@
+body {
+    background-color: rgb(25, 25, 25);
+    color: white;
+    font-family: "Monaco", serif;
+}
+
 header {
-    background-color: #00ffff;
+    background-color: rgba(40, 40, 40, 80);
     height: 5em;
     display: flex;
     align-items: center;
@@ -14,12 +20,32 @@ header {
 
 header a {
     font-size: 2rem;
-    color: #000000;
+    color: white;
     text-decoration: none;
 }
 
 .invisible {
     display: none;
+}
+
+input {
+    border: rgb(40, 40, 40) 2px solid;
+    background-color: rgb(25, 25, 25);
+    color: white;
+    font-family: "Monaco", serif;
+}
+
+button {
+    border: rgb(40, 40, 40) 2px solid;
+    border-radius: 7px;
+    background-color: rgb(25, 25, 25);
+    color: white;
+    font-family: "Monaco", serif;
+    transition-duration: 0.2s;
+}
+
+button:hover {
+    background-color: rgb(40, 40, 40);
 }
 
 #userGreeting{
