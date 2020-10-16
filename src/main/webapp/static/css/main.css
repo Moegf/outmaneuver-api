@@ -24,6 +24,10 @@ header a {
     text-decoration: none;
 }
 
+header a:visited {
+    color: white;
+}
+
 .invisible {
     display: none;
 }
@@ -46,6 +50,14 @@ button {
 
 button:hover {
     background-color: rgb(40, 40, 40);
+}
+
+a {
+    color: deepskyblue;
+}
+
+a:visited {
+    color: darkturquoise;
 }
 
 #userGreeting{
