@@ -22,14 +22,15 @@ public class Main {
         tomcat.setPort(Integer.valueOf(webPort));
 
         StandardContext ctx = (StandardContext) tomcat.addWebapp("", new File("./" + webappDirLocation).getAbsolutePath());
-
         File additionWebInfClasses = new File("target/classes");
         WebResourceRoot resources = new StandardRoot(ctx);
-        resources.addPreResources(new DirResourceSet(resources, "/WEB-INF/classes",
-                additionWebInfClasses.getAbsolutePath(), "/"));
+        resources.addPreResources(new DirResourceSet(resources, "/WEB-INF/classes", additionWebInfClasses.getAbsolutePath(), "/"));
         ctx.setResources(resources);
 
         System.out.println("Starting server at port: " + webPort);
+
+        //initialize firebase
+        firebase.Firebase.initialize();
 
         tomcat.start();
         tomcat.getServer().await();
