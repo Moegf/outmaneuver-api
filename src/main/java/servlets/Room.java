@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class Play extends HttpServlet {
+public class Room extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        RequestDispatcher view = req.getRequestDispatcher("/static/html/play.html");
+        RequestDispatcher view = req.getRequestDispatcher("/static/html/room.html");
         view.forward(req, res);
     }
 }
