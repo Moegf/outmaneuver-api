@@ -1,6 +1,8 @@
 package firebase;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 
@@ -12,17 +14,18 @@ import java.nio.charset.StandardCharsets;
 
 public class Firebase {
     private static boolean initialized = false;
+    static Firestore db;
 
     static public void initialize() throws IOException {
         if(initialized)
             return;
 
-        FirebaseOptions options = new FirebaseOptions.Builder()
+        FirestoreOptions options = FirestoreOptions.getDefaultInstance().toBuilder()
                 .setCredentials(GoogleCredentials.fromStream(new ByteArrayInputStream(System.getenv("firebase").getBytes(StandardCharsets.UTF_8))))
-                .setDatabaseUrl("https://outmaneuver-cc274.firebaseio.com")
                 .build();
 
-        FirebaseApp.initializeApp(options);
+
+        db = options.getService();
 
         initialized = true;
 
