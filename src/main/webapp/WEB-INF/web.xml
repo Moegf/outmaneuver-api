@@ -19,6 +19,10 @@
         <servlet-name>Play</servlet-name>
         <servlet-class>servlets.Play</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Room</servlet-name>
+        <servlet-class>servlets.Room</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>/static/*</url-pattern>
@@ -42,6 +46,10 @@
     <servlet-mapping>
         <servlet-name>Play</servlet-name>
         <url-pattern>/play</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Room</servlet-name>
+        <url-pattern>/room</url-pattern>
     </servlet-mapping>
     <error-page>
         <error-code>404</error-code>

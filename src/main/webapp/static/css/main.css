@@ -97,6 +97,14 @@ a:visited {
     text-align: center;
 }
 
+.room > h3 {
+    text-align: center;
+}
+
+.room > .delete {
+    color: red;
+}
+
 .room:hover {
     box-shadow: 0px 0px 20px rgba(30, 30, 30,80);
     border-radius: 10px;

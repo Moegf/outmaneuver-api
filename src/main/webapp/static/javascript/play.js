@@ -14,6 +14,11 @@ firebase.auth().onAuthStateChanged(user => {
     }
 })
 
+addEventListener('keydown',event => {
+    if(event.key === "Enter")
+        newRoom()
+})
+
 async function loadRooms() {
     firebase.firestore().collection("rooms").get().then(snapshot => {
         snapshot.forEach(room => {
@@ -22,10 +27,19 @@ async function loadRooms() {
     })
 }
 
-function drawRoom(room){
+async function drawRoom(room){
+    //get host user object
+    let host = await firebase.firestore().collection("users").doc(room.data().host).get()
     let roomHTML = "";
     roomHTML += `<div class="room">`
     roomHTML += `<h1>${room.data().name}</h1>`
+        roomHTML += `<h3>Hosted By: ${host.data().username}</h3>`
+
+    if(room.data().host == firebase.auth().currentUser.uid) {
+        roomHTML += `<h3 class="delete" onclick="deleteRoom('${room.id}')">Delete Room</h3>`
+    }
+
+    roomHTML += `<a href="/room?id=${room.id}">join</a>`
     roomHTML += `</div>`
 
     roomContainer.innerHTML += roomHTML
@@ -41,13 +55,22 @@ function newRoom(){
 
     firebase.firestore().collection("rooms").add({
         name: name,
-        status: pending,
+        status: "pending",
         host: firebase.auth().currentUser.uid
     }).then(room => {
         //TODO: send user to room
         location.reload()
     }).catch(error => {
         alert(`An error occured while creating a new room: ${error.message}`)
+        location.reload()
+    })
+}
+
+function deleteRoom(id){
+    firebase.firestore().collection("rooms").doc(id).delete().then(() => {
+        location.reload()
+    }).catch(error => {
+        alert(`Unable to delete room: ${error.message}`)
         location.reload()
     })
 }
