@@ -15,3 +15,6 @@ public class Play extends HttpServlet {
         view.forward(req, res);
     }
 }
+=======
+}
+>>>>>>> origin/master

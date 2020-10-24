@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>Signup</title>
         <link rel="stylesheet" href="/static/css/main.css"/>
 
-        <script defer src="https://www.gstatic.com/firebasejs/7.22.1/firebase-app.js"></script>
-        <script defer src="https://www.gstatic.com/firebasejs/7.22.1/firebase-auth.js"></script>
-        <script defer src="https://www.gstatic.com/firebasejs/7.22.1/firebase-firestore.js"></script>
+        <script defer src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+        <script defer src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
+        <script defer src="https://www.gstatic.com/firebasejs/7.24.0/firebase-firestore.js"></script>
         <script defer src="/static/javascript/init-firebase.js"></script>
         <script defer src="/static/javascript/signup.js"></script>
     </head>
@@ -19,10 +19,13 @@
             <a href="/play">Play</a>
         </header>
         <form>
-            <input type="email" id="email" placeholder="Email"></input><br>
-            <input type="password" id="password" placeholder="Password"></input><br>
-            <input type="password" id="passwordConfirm" placeholder="Confirm Password"></input><br>
+            <input type="email" id="email" placeholder="Email"/><br>
+            <input type="text" id="username" placeholder="Username (3+ letters)">
+            <img src="/static/assets/check-green.svg" id="unique" class="invisible" title="Username is available" alt="green-check"/>
+            <img src="/static/assets/cancel-red.svg" id="taken" class="invisible" title="Username is unavailable" alt="red-x"/><br>
+            <input type="password" id="password" placeholder="Password"/><br>
+            <input type="password" id="passwordConfirm" placeholder="Confirm Password"/><br>
         </form>
-        <button onclick="signup()">Create User</button>
+        <button onclick="signup()" id="signupButton">Create User</button>
     </body>
 </html>
