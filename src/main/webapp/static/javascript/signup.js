@@ -1,19 +1,10 @@
 let uInput = document.getElementById("username")
 let uTimer
-let uNames
 let ready = true
 
 // firebase.firestore.setLogLevel('debug')
 
-firebase.firestore().doc("/usernames/taken").get().then((doc) => {
-    if (doc.exists) {
-        uNames = doc.data().usernames
-    } else {
-        alert("Error: could not get document")
-    }
-}).catch(error => {
-    alert("Something went wrong: " + error.message)
-})
+// check entered username if nothing is typed for 1 second
 
 uInput.addEventListener('keyup', () => {
     clearTimeout(uTimer)
@@ -28,6 +19,8 @@ addEventListener('keydown',event => {
     if(event.key === "Enter")
         signup()
 })
+
+// redirect if user is successfully logged in and/or signup process is finished
 
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
@@ -46,17 +39,15 @@ function checkUname() {
     let unique = document.getElementById("unique")
     let taken = document.getElementById("taken")
 
+    // check if username is 3 or more characters
+
     if (uInput.value.length >= 3) {
-        if (!(uNames.includes(uInput.value))) {
-            unique.classList.remove("invisible")
-            taken.classList.add("invisible")
-            document.getElementById("signupButton").disabled = false
-        } else {
-            unique.classList.add("invisible")
-            taken.classList.remove("invisible")
-            document.getElementById("signupButton").disabled = true
-        }
+        // show green check mark
+        unique.classList.remove("invisible")
+        taken.classList.add("invisible")
+        document.getElementById("signupButton").disabled = false
     } else {
+        // show red x
         unique.classList.add("invisible")
         taken.classList.remove("invisible")
         document.getElementById("signupButton").disabled = true
@@ -74,31 +65,23 @@ function signup() {
         // location.reload()
     }
 
-    firebase.firestore().doc("/usernames/taken").get().then(doc => {
-        if (doc.exists) {
-            uNames = doc.data().usernames
-            if (uInput.value.length >= 3 && !(uNames.includes(uInput.value))) {
-                firebase.auth().createUserWithEmailAndPassword(email, password).then(result => {
-                    firebase.firestore().doc("/users/" + result.user.uid).set({
-                        username: uInput.value
-                    }).then(() => {
-                        ready = true
-                    }).catch(error => {
-                        alert("Something went wrong: " + error.message)
-                    })
-                }).catch(error => {
-                    alert(`Something went wrong: ${error.message}`)
-                    // location.reload()
-                })
+    // check username length
 
-            } else {
-                alert("Error: invalid username")
-            }
-        } else {
-            alert("Error: could not get document")
-        }
-    }).catch(error => {
-        alert(`Something went wrong: ${error.message}`)
-        // location.reload()
-    })
+    if (uInput.value.length >= 3) {
+        firebase.auth().createUserWithEmailAndPassword(email, password).then(result => {
+            // update / create user document with username
+            firebase.firestore().doc("/users/" + result.user.uid).set({
+                username: uInput.value
+            }).then(() => {
+                ready = true
+            }).catch(error => {
+                alert("Something went wrong: " + error.message)
+            })
+        }).catch(error => {
+            alert(`Something went wrong: ${error.message}`)
+            // location.reload()
+        })
+    } else {
+        alert("Error: invalid username")
+    }
 }
