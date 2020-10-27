@@ -63,3 +63,10 @@ a:visited {
 #userGreeting{
     font-size: 20pt;
 }
+
+.errorContainer {
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
