@@ -56,10 +56,12 @@ function newRoom(){
     firebase.firestore().collection("rooms").add({
         name: name,
         status: "pending",
-        host: firebase.auth().currentUser.uid
+        host: firebase.auth().currentUser.uid,
     }).then(room => {
-        //TODO: send user to room
-        location.reload()
+        room.collection("players").doc(firebase.auth().currentUser.uid).set({
+            role: "waiting"
+        })
+        window.location = `/room?id=${room.id}`
     }).catch(error => {
         alert(`An error occured while creating a new room: ${error.message}`)
         location.reload()
