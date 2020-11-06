@@ -1,14 +1,19 @@
 package launch;
 
+import game.Room;
 import org.apache.catalina.WebResourceRoot;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.webresources.DirResourceSet;
 import org.apache.catalina.webresources.StandardRoot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
 public class Main {
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) throws Exception {
 
         String webappDirLocation = "src/main/webapp";
@@ -29,8 +34,20 @@ public class Main {
 
         System.out.println("Starting server at port: " + webPort);
 
-        //initialize firebase
-        firebase.Firebase.initialize();
+        /*Thread debugThread = new Thread(() -> {
+            while(true){
+            logger.debug(Room.roomByID.toString());
+             {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }}
+        });
+
+        debugThread.start();*/
 
         tomcat.start();
         tomcat.getServer().await();
