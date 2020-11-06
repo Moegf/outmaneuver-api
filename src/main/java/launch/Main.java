@@ -32,22 +32,7 @@ public class Main {
         resources.addPreResources(new DirResourceSet(resources, "/WEB-INF/classes", additionWebInfClasses.getAbsolutePath(), "/"));
         ctx.setResources(resources);
 
-        System.out.println("Starting server at port: " + webPort);
-
-        /*Thread debugThread = new Thread(() -> {
-            while(true){
-            logger.debug(Room.roomByID.toString());
-             {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }}
-        });
-
-        debugThread.start();*/
+        logger.debug("Starting server at port: " + webPort);
 
         tomcat.start();
         tomcat.getServer().await();
