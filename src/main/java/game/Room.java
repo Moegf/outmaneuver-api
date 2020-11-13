@@ -3,12 +3,15 @@ package game;
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.cloud.firestore.*;
+import firebase.Firebase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webSocket.MessageOutgoing;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public class Room {
 
@@ -25,10 +28,10 @@ public class Room {
         }
     }
 
-    private enum Role {
+    public enum Role {
         WAITING(6, "waiting"),
-        CONGLOMERATE_PILOT(3, "conglomerate_pilot"),
-        REBEL_PILOT(1, "rebel_pilot"),
+        CONGLOMERATE_PILOT(3, "conglomerate pilot"),
+        REBEL_PILOT(1, "rebel pilot"),
         NAVIGATOR(1, "navigator"),
         ENGINEER(1, "engineer");
 
@@ -47,30 +50,25 @@ public class Room {
                 stringToRole.put(role.name, role);
         }
 
-        private int maxPlayers;
-        private String name;
+        private final int maxPlayers;
+        private final String name;
 
         Role(int maxPlayers, String name) {
             this.maxPlayers = maxPlayers;
             this.name = name;
         }
-    }
 
-    //contains data needed to upload player to firestore
-    private static final class dbPlayer {
-        public String uid;
-        public Role role;
-
-        dbPlayer(String uid, Role role) {
-            this.uid = uid;
-            this.role = role;
-        }
+        public int getMaxPlayers() { return maxPlayers; }
+        public String getName() { return name; }
     }
 
     private final Map<Player, Role> playersToRole;
     private final String host;
     private final String id;
+    //TODO: status should be changed to be an enum
     private final String status;
+
+    private final Map<Role, Integer> roleAvailability;
 
     public String getID() { return id; }
 
@@ -79,6 +77,11 @@ public class Room {
         this.id = id;
         this.host = host;
         this.status = status;
+
+        roleAvailability = new ConcurrentHashMap<>();
+
+        for(Role role: Role.values())
+            roleAvailability.put(role, role.getMaxPlayers());
     }
 
     public Room(String id, String host, String status){
@@ -88,15 +91,27 @@ public class Room {
     public void addPlayer(Player player, Role role) {
         playersToRole.put(player, role);
         logger.debug("Player: " + player + " has joined room: " + this);
+        roleAvailability.put(role, roleAvailability.get(role) - 1);
         updateFirestore();
+
+        //send gamedata to player
+        sendGameData(player);
     }
 
     public void addPlayer(Player player) { addPlayer(player, Role.WAITING);}
 
     public void removePlayer(Player player) {
-        playersToRole.remove(player);
+        Role role = playersToRole.remove(player);
+        roleAvailability.put(role, roleAvailability.get(role) + 1);
         logger.debug("Player: " + player + " has left room: " + this);
-        updateFirestore();
+        //delete doc in firebase
+        try {
+            Firebase.getDB().collection("rooms").document(id).collection("players").document(player.getUid()).delete().get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        //update other users
+        sendGameData();
     }
 
     public void updateFirestore() {
@@ -116,7 +131,44 @@ public class Room {
             ), SetOptions.merge());
         }
 
-        logger.debug("Updated firestore copy of room: " + this);
+        logger.info("Updated firestore copy of room: " + this);
+    }
+
+    //send game data to player
+    public void sendGameData(Player player) {
+        logger.info("Sending game data for room: " + this + " to " + player);
+
+        MessageOutgoing message = new MessageOutgoing.Builder("gamedata")
+                .put("players", playersToRole.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().getUid(), e -> e.getValue().getName())))
+                .put("roles", roleAvailability.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().getName(), e -> e)))
+                .put("status", status)
+                .build();
+
+        //send data to player
+        player.send(message);
+    }
+
+    //send game data to a collection of players
+    public void sendGameData(Collection<Player> players){
+        for(Player player: players)
+            sendGameData(player);
+    }
+
+    //send game data to all players in the room
+    public void sendGameData() { sendGameData(playersToRole.keySet()); }
+
+    //sets the role of a given player
+    public void setRole(Player player, Role role) {
+        if(!playersToRole.keySet().contains(player))
+            throw new IllegalArgumentException("Player " + player + " is not in room " + this);
+
+        playersToRole.put(player, role);
+        roleAvailability.put(role, roleAvailability.get(role) - 1);
+
+        logger.info("The player " + player + " has chosen the role " + role);
+
+        updateFirestore();
+        sendGameData();
     }
 
     public static void addRoom(Room room){ roomByID.put(room.getID(), room); }
@@ -127,7 +179,7 @@ public class Room {
 
     public static void loadFromFirebase() throws ExecutionException, InterruptedException {
 
-        logger.debug("Loading rooms from firestore");
+        logger.info("Loading rooms from firestore");
 
         Firestore db = firebase.Firebase.getDB();
 
@@ -155,7 +207,7 @@ public class Room {
             logger.debug("Room loaded: " + room);
         }
 
-        logger.debug("Rooms loaded");
+        logger.info("Rooms loaded");
 
         //add listener for update
         db.collection("rooms").addSnapshotListener((snapshots, e) -> {
@@ -182,7 +234,10 @@ public class Room {
                 }
             }
 
-            logger.debug("The following rooms were removed: " + roomByID.values());
+            //update all players in new room
+            newRooms.forEach((string, room) -> room.sendGameData());
+
+            logger.info("The following rooms were removed: " + roomByID.values());
 
             roomByID.clear();
             roomByID.putAll(newRooms);

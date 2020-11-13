@@ -20,6 +20,8 @@ public class MessageDecoder implements Decoder.Text<Message> {
         switch(type) {
             case "join":
                 return gson.fromJson(s, MessageJoin.class);
+            case "role":
+                return new MessageRole(message.get("role").getAsString());
             default:
                 throw new RuntimeException("Type of message not recognized: " + type);
         }

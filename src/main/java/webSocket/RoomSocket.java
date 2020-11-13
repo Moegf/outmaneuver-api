@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,11 +20,10 @@ public class RoomSocket {
     public static void addPlayerBySession(Player player){
         playerBySession.put(player.getSession(), player);
     }
+    public static Player getPlayerBySession(Session session) { return playerBySession.get(session); }
 
     @OnOpen
-    public void onOpen(Session session) {
-        sessions.add(session);
-    }
+    public void onOpen(Session session) { sessions.add(session); }
 
     @OnMessage
     public void onMessage(Session session, Message message){
@@ -41,7 +41,7 @@ public class RoomSocket {
 
     @OnError
     public void onError(Session session, Throwable error) {
-        logger.debug("An Error Occurred with the Websocket: " + error.getMessage());
+        logger.debug("An Error Occurred with the Websocket, " + session + ": " + error.getMessage());
         sessions.remove(session);
         if(playerBySession.containsKey(session)) {
             Player player = playerBySession.remove(session);
