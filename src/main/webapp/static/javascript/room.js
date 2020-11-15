@@ -1,4 +1,5 @@
 let gameContainer = document.getElementById("gameContainer")
+let webSocketURL = window.location.hostname === "localhost" ? "ws://localhost/roomsocket": "ws://outmaneuver.herokuapp.com/roomsocket"
 let roleMenu = document.getElementById("roleMenu")
 let room
 let user
@@ -17,7 +18,7 @@ firebase.auth().onAuthStateChanged(data => {
             location.reload()
         }).then(() => {
             loadRoom(room)
-            webSocket = new WebSocket("ws://localhost/roomsocket")
+            webSocket = new WebSocket(webSocketURL)
             webSocket.onopen = () => joinRoom(user, room)
             webSocket.onmessage = event => handleMessage(event)
         })
