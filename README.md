@@ -1,17 +1,17 @@
-#OutManeuver
+# OutManeuver
 OutManeuver is a multiplayer online game in development by the Commonwealth School game design club.
 
-##Running
+## Running
 The Maven manages the dependencies, use the package and clean commands accordingly.
 To run, create use `launcher.Main` as the main class. In order for Firebase to work, admin credentials must be entered as an environment variable.
 
-##API
+## API
 The backend uses a websocket located at `/roomsocket` to handle player commands sent over JSON.
 The following features are supported:
 
-###From Client to Server
+### From Client to Server
 
-####Joining A Room
+#### Joining A Room
 ```json5
 {
   type: "join",
@@ -20,7 +20,7 @@ The following features are supported:
 }
 ```
 
-####Selecting A Role
+#### Selecting A Role
 ```json5
 {
   type: "role",
@@ -28,9 +28,9 @@ The following features are supported:
 }
 ```
 
-###From Server to Client
+### From Server to Client
 
-####Updating gamedata
+#### Updating gamedata
 ```json5
 {
   players: {}, //map of player to role
