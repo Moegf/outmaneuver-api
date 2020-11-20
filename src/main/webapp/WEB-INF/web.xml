@@ -12,12 +12,16 @@
         <servlet-class>servlets.Signup</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>servlets.Login</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>Play</servlet-name>
         <servlet-class>servlets.Play</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Login</servlet-name>
-        <servlet-class>servlets.Login</servlet-class>
+        <servlet-name>Room</servlet-name>
+        <servlet-class>servlets.Room</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Graphics</servlet-name>
@@ -46,6 +50,10 @@
     <servlet-mapping>
         <servlet-name>Play</servlet-name>
         <url-pattern>/play</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Room</servlet-name>
+        <url-pattern>/room</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Graphics</servlet-name>
